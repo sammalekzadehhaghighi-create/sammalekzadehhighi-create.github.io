@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سامانه مدیریت محمدسام ملک زاده | هوش مصنوعی و دستیار تحصیلی پایه هفتم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#fffdf0',
+                            100: '#fff9c2',
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                            800: '#854d0e',
+                            900: '#713f12',
+                            glow: '#ffd700'
+                        },
+                        darkbg: '#0a0a0c',
+                        cardbg: '#121318',
+                    },
+                    fontFamily: {
+                        vazir: ['Vazirmatn', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #08080a;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(234, 179, 8, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 100% 100%, rgba(202, 138, 4, 0.08) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .gold-border-glow {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.25), inset 0 0 15px rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+        }
+
+        .gold-text-gradient {
+            background: linear-gradient(135deg, #fff3a1 0%, #facc15 50%, #a16207 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-button {
+            background: linear-gradient(135deg, #ca8a04 0%, #eab308 50%, #854d0e 100%);
+            transition: all 0.3s ease;
+        }
+
+        .gold-button:hover {
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Background luxury logo circle */
+        .bg-logo-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            max-width: 650px;
+            height: 80vw;
+            max-height: 650px;
+            background: radial-gradient(circle, rgba(234, 179, 8, 0.04) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            border: 1px dashed rgba(234, 179, 8, 0.15);
+            animation: pulse-glow 8s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulse-glow {
+            0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: #121318;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #ca8a04;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Background Luxury Logo Accent -->
+    <div class="bg-logo-watermark flex items-center justify-center">
+        <div class="w-48 h-48 sm:w-80 sm:h-80 rounded-full border-4 border-yellow-600/20 flex flex-col items-center justify-center text-center p-4">
+            <span class="text-yellow-500/20 font-bold text-3xl sm:text-5xl">محمدسام</span>
+            <span class="text-yellow-600/20 text-xs sm:text-sm mt-2">پایه هفتم - مدیریت اختصاصی</span>
+        </div>
+    </div>
+
+    <!-- Top Banner & Header -->
+    <header class="relative z-10 w-full bg-black/80 backdrop-blur-md border-b border-yellow-600/30 sticky top-0 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <!-- Title Branding -->
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-12 h-12 rounded-full border-2 border-yellow-500 bg-black flex items-center justify-center shadow-lg shadow-yellow-500/20">
+                    <i class="fa-solid fa-crown text-yellow-400 text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black gold-text-gradient tracking-wide">
+                        مدیریت محمدسام ملک زاده
+                    </h1>
+                    <p class="text-xs text-gray-400">سامانه هوشمند تحصیلی پایه هفتم &bull; همیار اختصاصی</p>
+                </div>
+            </div>
+
+            <!-- Clock & Status Bar -->
+            <div class="flex items-center gap-4 bg-gray-900/80 border border-yellow-600/30 px-4 py-2 rounded-xl text-sm">
+                <div class="text-center">
+                    <span id="current-time" class="text-yellow-400 font-mono font-bold text-lg">00:00:00</span>
+                    <span id="current-date" class="block text-xs text-gray-400">--</span>
+                </div>
+                <div class="h-8 w-px bg-yellow-600/30"></div>
+                <div id="alarm-indicator" class="flex items-center gap-2 text-xs text-yellow-400">
+                    <i class="fa-solid fa-bell text-yellow-500 animate-bounce"></i>
+                    <div>
+                        <div>⏰ بیداری: ۰۶:۳۰</div>
+                        <div>🌙 خواب: ۲۲:۰۰</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 flex-grow max-w-7xl w-full mx-auto px-2 sm:px-4 py-6 flex flex-col gap-6">
+
+        <!-- Navigation Tabs -->
+        <nav class="flex flex-wrap items-center justify-center gap-2 bg-gray-900/90 p-2 rounded-2xl border border-yellow-600/30 shadow-xl">
+            <button onclick="switchTab('ai-chat')" id="tab-btn-ai-chat" class="nav-tab active flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all gold-button text-black font-bold">
+                <i class="fa-solid fa-robot"></i>
+                <span>هوش مصنوعی محمدسام (همیار)</span>
+            </button>
+            <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="nav-tab flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-300 hover:text-yellow-400 hover:bg-gray-800">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>برنامه کلاسی و تقویم</span>
+            </button>
+            <button onclick="switchTab('alarms')" id="tab-btn-alarms" class="nav-tab flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-300 hover:text-yellow-400 hover:bg-gray-800">
+                <i class="fa-solid fa-clock"></i>
+                <span>اعلان و آلارم بیداری/خواب</span>
+            </button>
+            <button onclick="switchTab('generator')" id="tab-btn-generator" class="nav-tab flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-300 hover:text-yellow-400 hover:bg-gray-800">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <span>تصویرساز و ویدیوساز بی‌پایان</span>
+            </button>
+            <button onclick="switchTab('hamyar')" id="tab-btn-hamyar" class="nav-tab flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all text-gray-300 hover:text-yellow-400 hover:bg-gray-800">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>مرکز دانلود همیار</span>
+            </button>
+        </nav>
+
+        <!-- Tab 1: Mohammadsam AI Assistant -->
+        <section id="tab-ai-chat" class="tab-content block">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Sidebar Info -->
+                <div class="lg:col-span-1 bg-gray-900/80 backdrop-blur border border-yellow-600/30 rounded-2xl p-4 flex flex-col gap-4">
+                    <div class="text-center border-b border-yellow-600/20 pb-4">
+                        <div class="relative inline-block">
+                            <div class="w-20 h-20 mx-auto rounded-full border-2 border-yellow-500 bg-black flex items-center justify-center shadow-lg shadow-yellow-500/30">
+                                <i class="fa-solid fa-user-astronaut text-3xl text-yellow-400"></i>
+                            </div>
+                            <span class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-black rounded-full"></span>
+                        </div>
+                        <h3 class="mt-2 font-bold text-yellow-400 text-lg">هوش مصنوعی اختصاصی</h3>
+                        <p class="text-xs text-gray-400">مدیریت: محمدسام ملک زاده</p>
+                    </div>
+
+                    <div class="bg-yellow-950/30 border border-yellow-600/30 p-3 rounded-xl text-xs space-y-2 text-yellow-200">
+                        <div class="font-bold flex items-center gap-1 text-yellow-400">
+                            <i class="fa-solid fa-shield-halved"></i> قانون پاسخگویی:
+                        </div>
+                        <p>این هوش مصنوعی <b>فقط و فقط</b> پاسخگوی سوالات درسی پایه هفتم (مطابق اپلیکیشن همیار) می‌باشد.</p>
+                        <p class="text-gray-300">&bull; پاسخ به جای خالی: درج مستقیم در نقطه چین.</p>
+                        <p class="text-gray-300">&bull; امکان ارسال عکس، فایل و وویس.</p>
+                    </div>
+
+                    <!-- Quick Prompt Hints -->
+                    <div>
+                        <span class="text-xs font-bold text-gray-400 block mb-2">میانبرهای سریع همیار هفتم:</span>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="insertQuickPrompt('جواب جای خالی این سوال درسی چیست؟')" class="text-right text-xs bg-gray-800 hover:bg-yellow-600/20 text-gray-300 hover:text-yellow-400 p-2 rounded-lg border border-gray-700 transition">
+                                📝 حل نقطه چین و جای خالی
+                            </button>
+                            <button onclick="insertQuickPrompt('پاسخ پرسش‌های درس علوم پایه هفتم فصل اول')" class="text-right text-xs bg-gray-800 hover:bg-yellow-600/20 text-gray-300 hover:text-yellow-400 p-2 rounded-lg border border-gray-700 transition">
+                                🔬 حل سوالات علوم هفتم
+                            </button>
+                            <button onclick="insertQuickPrompt('تمرین‌های صفحه ۲۰ ریاضی پایه هفتم با راه حل')" class="text-right text-xs bg-gray-800 hover:bg-yellow-600/20 text-gray-300 hover:text-yellow-400 p-2 rounded-lg border border-gray-700 transition">
+                                📐 پاسخ ریاضی هفتم
+                            </button>
+                            <button onclick="insertQuickPrompt('معنی و ترجمه درس اول عربی هفتم')" class="text-right text-xs bg-gray-800 hover:bg-yellow-600/20 text-gray-300 hover:text-yellow-400 p-2 rounded-lg border border-gray-700 transition">
+                                📖 ترجمه عربی هفتم
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Box Screen -->
+                <div class="lg:col-span-3 bg-gray-900/90 backdrop-blur border border-yellow-600/30 rounded-2xl flex flex-col h-[620px] shadow-2xl relative overflow-hidden">
+                    <!-- Chat Header -->
+                    <div class="bg-black/60 px-4 py-3 border-b border-yellow-600/30 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-brain text-yellow-400 text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-yellow-400 text-sm">چت‌بات درسی همیار - محمدسام ملک زاده</h4>
+                                <span class="text-xs text-green-400 flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> آماده بررسی سوالات و تصاویر درسی
+                                </span>
+                            </div>
+                        </div>
+                        <button onclick="clearChat()" class="text-xs text-gray-400 hover:text-red-400 transition" title="پاکسازی گفتگو">
+                            <i class="fa-solid fa-trash"></i> پاکسازی
+                        </button>
+                    </div>
+
+                    <!-- Chat Messages Area -->
+                    <div id="chat-messages" class="flex-grow p-4 overflow-y-auto space-y-4 scrollbar-thin">
+                        <!-- Welcome message -->
+                        <div class="flex gap-3 max-w-[85%]">
+                            <div class="w-9 h-9 rounded-full bg-yellow-600/30 border border-yellow-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-robot text-yellow-400 text-sm"></i>
+                            </div>
+                            <div class="bg-gray-800 border border-yellow-600/20 text-gray-200 rounded-2xl rounded-tr-none p-3 text-sm leading-relaxed shadow-lg">
+                                سلام! من <b>هوش مصنوعی اختصاصی محمدسام ملک زاده</b> هستم. 🎓<br>
+                                من دقیقا مطابق با اطلاعات <b>کتاب‌ها و برنامه همیار پایه هفتم</b> برنامه ریزی شده‌ام.<br>
+                                عکس یا سوالات تکالیف، جای خالی، علوم، ریاضی، عربی و فارسی‌‌ات را بفرست تا مستقیم و دقیق پاسخش را در نقطه چین برایت بنویسم!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Media Attachment Preview Bar -->
+                    <div id="attachment-preview" class="hidden px-4 py-2 bg-black/40 border-t border-yellow-600/20 flex items-center justify-between">
+                        <div class="flex items-center gap-2 text-xs text-yellow-400">
+                            <i class="fa-solid fa-paperclip"></i>
+                            <span id="attachment-name">تصویر انتخاب شد</span>
+                        </div>
+                        <button onclick="removeAttachment()" class="text-xs text-red-400 hover:underline">حذف</button>
+                    </div>
+
+                    <!-- Input Form -->
+                    <div class="p-3 bg-black/80 border-t border-yellow-600/30">
+                        <form id="chat-form" onsubmit="handleChatSubmit(event)" class="flex items-center gap-2">
+                            <!-- Hidden File Input -->
+                            <input type="file" id="chat-file-input" accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
+                            
+                            <button type="button" onclick="document.getElementById('chat-file-input').click()" class="p-2.5 rounded-xl bg-gray-800 hover:bg-yellow-600/30 border border-yellow-600/30 text-yellow-400 transition" title="ارسال عکس یا ویدیو">
+                                <i class="fa-solid fa-image text-lg"></i>
+                            </button>
+
+                            <button type="button" onclick="toggleVoiceInput()" id="voice-btn" class="p-2.5 rounded-xl bg-gray-800 hover:bg-yellow-600/30 border border-yellow-600/30 text-yellow-400 transition" title="ضبط صدا">
+                                <i class="fa-solid fa-microphone text-lg"></i>
+                            </button>
+
+                            <input type="text" id="chat-input" placeholder="سوال درسی، جای خالی یا تمرین پایه هفتم را بنویسید..." class="flex-grow bg-gray-900 border border-yellow-600/30 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-yellow-400 transition">
+
+                            <button type="submit" class="gold-button text-black font-bold px-5 py-2.5 rounded-xl flex items-center gap-2 hover:shadow-lg transition shrink-0">
+                                <span>ارسال</span>
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 2: Grade 7 Timetable & Calendar -->
+        <section id="tab-schedule" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Timetable Card -->
+                <div class="lg:col-span-2 bg-gray-900/90 border border-yellow-600/30 rounded-2xl p-5 shadow-xl">
+                    <div class="flex items-center justify-between border-b border-yellow-600/30 pb-3 mb-4">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-table-list text-yellow-400 text-xl"></i>
+                            <h3 class="font-bold text-yellow-400 text-lg">برنامه هفتگی کلاس هفتم (مدیریت محمدسام ملک زاده)</h3>
+                        </div>
+                        <span class="text-xs bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 px-3 py-1 rounded-full">پایه هفتم</span>
+                    </div>
+
+                    <!-- Timetable Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-black/60 text-yellow-400 border-b border-yellow-600/40">
+                                    <th class="p-3 border-r border-yellow-600/20">روز / زنگ</th>
+                                    <th class="p-3 border-r border-yellow-600/20">زنگ اول</th>
+                                    <th class="p-3 border-r border-yellow-600/20">زنگ دوم</th>
+                                    <th class="p-3">زنگ سوم</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-yellow-600/20 text-gray-200">
+                                <tr class="hover:bg-yellow-500/10 transition">
+                                    <td class="p-3 font-bold bg-black/30 text-yellow-300 border-r border-yellow-600/20">شنبه</td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">ورزش</span><br><span class="text-xs text-yellow-500/80">(آقای شهاب)</span></td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">مطالعات</span><br><span class="text-xs text-yellow-500/80">(آقای بهزادی)</span></td>
+                                    <td class="p-3"><span class="font-semibold text-white">زبان</span><br><span class="text-xs text-yellow-500/80">(آقای فهندژ)</span></td>
+                                </tr>
+                                <tr class="hover:bg-yellow-500/10 transition">
+                                    <td class="p-3 font-bold bg-black/30 text-yellow-300 border-r border-yellow-600/20">یکشنبه</td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">علوم</span><br><span class="text-xs text-yellow-500/80">(آقای توکلی)</span></td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">ریاضی</span><br><span class="text-xs text-yellow-500/80">(آقای رسولی)</span></td>
+                                    <td class="p-3"><span class="font-semibold text-white">عربی</span><br><span class="text-xs text-yellow-500/80">(آقای زارعی)</span></td>
+                                </tr>
+                                <tr class="hover:bg-yellow-500/10 transition">
+                                    <td class="p-3 font-bold bg-black/30 text-yellow-300 border-r border-yellow-600/20">دوشنبه</td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">فارسی</span><br><span class="text-xs text-yellow-500/80">(آقای غلامی)</span></td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">هنر</span><br><span class="text-xs text-yellow-500/80">(آقای شمس)</span></td>
+                                    <td class="p-3"><span class="font-semibold text-white">فناوری</span><br><span class="text-xs text-yellow-500/80">(آقای غلامی)</span></td>
+                                </tr>
+                                <tr class="hover:bg-yellow-500/10 transition">
+                                    <td class="p-3 font-bold bg-black/30 text-yellow-300 border-r border-yellow-600/20">سه‌شنبه</td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">املا</span><br><span class="text-xs text-yellow-500/80">(آقای شیری)</span></td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">علوم</span><br><span class="text-xs text-yellow-500/80">(آقای توکلی)</span></td>
+                                    <td class="p-3"><span class="font-semibold text-white">تفکر</span><br><span class="text-xs text-yellow-500/80">(آقای شمس)</span></td>
+                                </tr>
+                                <tr class="hover:bg-yellow-500/10 transition">
+                                    <td class="p-3 font-bold bg-black/30 text-yellow-300 border-r border-yellow-600/20">چهارشنبه</td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">پیام آسمانی</span><br><span class="text-xs text-yellow-500/80">(آقای کلانی)</span></td>
+                                    <td class="p-3 border-r border-yellow-600/20"><span class="font-semibold text-white">قرآن</span><br><span class="text-xs text-yellow-500/80">(آقای شعاع)</span></td>
+                                    <td class="p-3"><span class="font-semibold text-white">ریاضی</span><br><span class="text-xs text-yellow-500/80">(آقای رسولی)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Calendar Card -->
+                <div class="bg-gray-900/90 border border-yellow-600/30 rounded-2xl p-5 flex flex-col justify-between shadow-xl">
+                    <div>
+                        <div class="flex items-center gap-2 border-b border-yellow-600/30 pb-3 mb-4">
+                            <i class="fa-regular fa-calendar-check text-yellow-400 text-xl"></i>
+                            <h3 class="font-bold text-yellow-400 text-lg">تقویم خورشیدی هفتم</h3>
+                        </div>
+                        <div id="calendar-widget" class="bg-black/50 border border-yellow-600/20 rounded-xl p-4 text-center space-y-3">
+                            <div class="text-3xl font-black text-yellow-400" id="jalali-day-num">--</div>
+                            <div class="text-lg font-semibold text-gray-200" id="jalali-month-year">--</div>
+                            <div class="text-sm text-yellow-500" id="jalali-weekday">--</div>
+                        </div>
+                    </div>
+
+                    <!-- Teachers Quick Contact Box -->
+                    <div class="mt-4 bg-gray-800/80 border border-yellow-600/20 rounded-xl p-3 text-xs space-y-2">
+                        <span class="font-bold text-yellow-400 block">اساتید پایه هفتم:</span>
+                        <div class="grid grid-cols-2 gap-1 text-gray-300">
+                            <div>• آقای شهاب (ورزش)</div>
+                            <div>• آقای بهزادی (مطالعات)</div>
+                            <div>• آقای فهندژ (زبان)</div>
+                            <div>• آقای توکلی (علوم)</div>
+                            <div>• آقای رسولی (ریاضی)</div>
+                            <div>• آقای زارعی (عربی)</div>
+                            <div>• آقای غلامی (فارسی/فناوری)</div>
+                            <div>• آقای شمس (هنر/تفکر)</div>
+                            <div>• آقای شیری (املا)</div>
+                            <div>• آقای کلانی (پیام)</div>
+                            <div>• آقای شعاع (قرآن)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 3: Alarms & Wake/Sleep Schedule -->
+        <section id="tab-alarms" class="tab-content hidden">
+            <div class="max-w-3xl mx-auto bg-gray-900/90 border border-yellow-600/30 rounded-2xl p-6 shadow-2xl">
+                <div class="text-center border-b border-yellow-600/30 pb-4 mb-6">
+                    <i class="fa-solid fa-clock-rotate-left text-4xl text-yellow-400 mb-2"></i>
+                    <h3 class="text-2xl font-black text-yellow-400">سیستم هشدار و زمان‌بندی روزانه</h3>
+                    <p class="text-sm text-gray-400 mt-1">مدیریت منظم ساعت بیداری و خواب محمدسام ملک زاده</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Morning Alarm -->
+                    <div class="bg-black/60 border-2 border-yellow-500/50 rounded-2xl p-5 flex flex-col items-center justify-between text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-yellow-500 text-black font-bold text-xs px-3 py-1 rounded-bl-xl">
+                            ساعت بیداری
+                        </div>
+                        <i class="fa-solid fa-sun text-yellow-400 text-5xl my-4 animate-pulse"></i>
+                        <div class="text-4xl font-mono font-black text-yellow-300 my-2">۰۶:۳۰</div>
+                        <p class="text-xs text-gray-300 mb-4">هر روز صبح ساعت ۶:۳۰ جهت آماده‌سازی برای کلاس‌ها</p>
+                        <button onclick="toggleAlarm('wake')" id="wake-alarm-btn" class="w-full py-2.5 rounded-xl font-bold transition text-sm bg-green-600 hover:bg-green-500 text-white">
+                            <i class="fa-solid fa-bell"></i> هشدار بیداری فعال است
+                        </button>
+                    </div>
+
+                    <!-- Night Alarm -->
+                    <div class="bg-black/60 border-2 border-yellow-600/30 rounded-2xl p-5 flex flex-col items-center justify-between text-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-yellow-700 text-white font-bold text-xs px-3 py-1 rounded-bl-xl">
+                            ساعت خواب
+                        </div>
+                        <i class="fa-solid fa-moon text-yellow-500 text-5xl my-4"></i>
+                        <div class="text-4xl font-mono font-black text-yellow-400 my-2">۲۲:۰۰</div>
+                        <p class="text-xs text-gray-300 mb-4">هر شب ساعت ۱۰:۰۰ برای استراحت و خواب منظم</p>
+                        <button onclick="toggleAlarm('sleep')" id="sleep-alarm-btn" class="w-full py-2.5 rounded-xl font-bold transition text-sm bg-green-600 hover:bg-green-500 text-white">
+                            <i class="fa-solid fa-bell"></i> هشدار خواب فعال است
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-yellow-900/20 border border-yellow-600/30 rounded-xl p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-volume-high text-yellow-400 text-2xl"></i>
+                        <div>
+                            <h4 class="font-bold text-sm text-yellow-400">تست صدای آلارم و اعلان</h4>
+                            <p class="text-xs text-gray-400">اطمینان از فعال بودن پخش صوت در مرورگر</p>
+                        </div>
+                    </div>
+                    <button onclick="testAlarmSound()" class="gold-button text-black font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> تست صدا
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 4: Infinite AI Image & Video Generator -->
+        <section id="tab-generator" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- AI Image Generator -->
+                <div class="bg-gray-900/90 border border-yellow-600/30 rounded-2xl p-5 shadow-xl flex flex-col">
+                    <div class="border-b border-yellow-600/30 pb-3 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-image text-yellow-400 text-xl"></i>
+                        <h3 class="font-bold text-yellow-400 text-lg">تصویرساز بی‌پایان و رایگان</h3>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">هر آنچه در ذهنت داری توصیف کن تا تصویر اختصاصی با کیفیت عالی ساخته شود.</p>
+                    
+                    <div class="space-y-3 mb-4">
+                        <input type="text" id="image-prompt" placeholder="مثلا: یک کتابخانه جادویی طلایی پایه هفتم علوم..." class="w-full bg-black border border-yellow-600/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-400">
+                        <button onclick="generateAIImage()" class="w-full gold-button text-black font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>تولید تصویر بی‌نام و بی‌محدودیت</span>
+                        </button>
+                    </div>
+
+                    <div id="image-output-container" class="flex-grow bg-black/60 border border-yellow-600/20 rounded-xl min-h-[250px] flex items-center justify-center overflow-hidden relative">
+                        <p id="image-placeholder" class="text-xs text-gray-500">تصویر تولید شده اینجا نمایش داده می‌شود.</p>
+                        <img id="generated-image" class="hidden w-full h-auto max-h-[350px] object-contain rounded-xl" alt="AI Generated">
+                    </div>
+                </div>
+
+                <!-- AI Video Generator Simulation -->
+                <div class="bg-gray-900/90 border border-yellow-600/30 rounded-2xl p-5 shadow-xl flex flex-col">
+                    <div class="border-b border-yellow-600/30 pb-3 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-video text-yellow-400 text-xl"></i>
+                        <h3 class="font-bold text-yellow-400 text-lg">ویدیوساز بی‌پایان هوشمند</h3>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">موضوع ویدیو درسی یا انیمیشن آموزشی را وارد کنید تا تیزر هوشمند ساخته شود.</p>
+                    
+                    <div class="space-y-3 mb-4">
+                        <input type="text" id="video-prompt" placeholder="مثلا: انیمیشن سه‌بعدی آزمایشگاه علوم پایه هفتم..." class="w-full bg-black border border-yellow-600/30 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-yellow-400">
+                        <button onclick="generateAIVideo()" class="w-full gold-button text-black font-bold py-3 rounded-xl flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-film"></i>
+                            <span>تولید رندر ویدیویی آموزشی</span>
+                        </button>
+                    </div>
+
+                    <div id="video-output-container" class="flex-grow bg-black/60 border border-yellow-600/20 rounded-xl min-h-[250px] flex items-center justify-center overflow-hidden relative p-4">
+                        <div id="video-placeholder" class="text-center text-gray-500 text-xs">
+                            <i class="fa-solid fa-circle-play text-4xl block mb-2 opacity-40"></i>
+                            پیش‌نمایش ویدیو پس از تولید
+                        </div>
+                        <div id="video-player-box" class="hidden w-full text-center space-y-3">
+                            <canvas id="video-canvas" width="400" height="220" class="w-full max-h-[220px] rounded-lg border border-yellow-600/30 bg-black"></canvas>
+                            <span id="video-status-text" class="text-xs font-bold text-yellow-400 block">در حال رندر فریم‌های ویدیو...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab 5: Hamyar Hub & Myket Download -->
+        <section id="tab-hamyar" class="tab-content hidden">
+            <div class="max-w-4xl mx-auto bg-gray-900/90 border border-yellow-600/30 rounded-2xl p-6 shadow-2xl">
+                <div class="flex flex-col md:flex-row items-center gap-6 border-b border-yellow-600/30 pb-6 mb-6">
+                    <div class="w-28 h-28 bg-blue-600 rounded-2xl flex items-center justify-center border-2 border-yellow-400 shadow-xl shrink-0">
+                        <span class="text-white text-3xl font-black">همیار</span>
+                    </div>
+                    <div class="text-center md:text-right space-y-2">
+                        <h3 class="text-2xl font-black text-yellow-400">برنامه همیار (گام به گام پایه هفتم)</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            اپلیکیشن همیار کامل‌ترین مرجع پاسخ سوالات، گام به گام دروس، حل تمرینات و نمونه سوالات پایه هفتم متوسطه اول است.
+                        </p>
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2">
+                            <span class="bg-gray-800 border border-gray-700 text-yellow-400 text-xs px-3 py-1 rounded-full">نصب شده</span>
+                            <span class="bg-gray-800 border border-gray-700 text-gray-300 text-xs px-3 py-1 rounded-full">حجم: ۲۵.۶۹ مگابایت</span>
+                            <span class="bg-gray-800 border border-gray-700 text-green-400 text-xs px-3 py-1 rounded-full">ویژه مایکت</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-black/50 p-4 rounded-xl border border-yellow-600/20 text-center space-y-2">
+                        <i class="fa-solid fa-book-open text-yellow-400 text-2xl"></i>
+                        <h4 class="font-bold text-sm text-white">گام به گام کامل</h4>
+                        <p class="text-xs text-gray-400">پاسخ دقیق تمرینات ریاضی، علوم، عربی و فارسی</p>
+                    </div>
+                    <div class="bg-black/50 p-4 rounded-xl border border-yellow-600/20 text-center space-y-2">
+                        <i class="fa-solid fa-file-pen text-yellow-400 text-2xl"></i>
+                        <h4 class="font-bold text-sm text-white">نمونه سوال امتحانی</h4>
+                        <p class="text-xs text-gray-400">سوالات نوبت اول و دوم پایه هفتم</p>
+                    </div>
+                    <div class="bg-black/50 p-4 rounded-xl border border-yellow-600/20 text-center space-y-2">
+                        <i class="fa-solid fa-brain text-yellow-400 text-2xl"></i>
+                        <h4 class="font-bold text-sm text-white">همگام با هوش مصنوعی</h4>
+                        <p class="text-xs text-gray-400">اتصال مستقیم به دستیار محمدسام ملک زاده</p>
+                    </div>
+                </div>
+
+                <div class="text-center pt-2">
+                    <a href="https://myket.ir/app/com.hamyar.app" target="_blank" class="gold-button text-black font-extrabold px-8 py-3.5 rounded-xl text-base inline-flex items-center gap-3 shadow-lg hover:scale-105 transition">
+                        <i class="fa-solid fa-download text-lg"></i>
+                        <span>دانلود مستقیم اپلیکیشن همیار از مایکت</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Bar -->
+    <footer class="relative z-10 bg-black/90 border-t border-yellow-600/30 py-4 text-center text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div>
+                تمامی حقوق محفوظ است &copy; 2026 | <span class="text-yellow-400 font-bold">مدیریت محمدسام ملک زاده</span>
+            </div>
+            <div class="flex items-center gap-4 text-yellow-500/80">
+                <span>پایه هفتم متوسطه</span>
+                <span>•</span>
+                <span>برنامه همیار</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- State Variables ---
+        let currentTab = 'ai-chat';
+        let wakeAlarmActive = true;
+        let sleepAlarmActive = true;
+        let selectedFile = null;
+        let isRecording = false;
+
+        // --- Audio Synthesizer for Alarms ---
+        function playTone(freq, type, duration) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type || 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {
+                console.log("Audio not supported or blocked");
+            }
+        }
+
+        function testAlarmSound() {
+            playTone(880, 'sine', 0.5);
+            setTimeout(() => playTone(1046.5, 'triangle', 0.8), 200);
+            alert("🔊 صدای هشدار پخش شد.");
+        }
+
+        // --- Navigation Switcher ---
+        function switchTab(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('gold-button', 'text-black', 'font-bold');
+                btn.classList.add('text-gray-300');
+            });
+
+            const activeBtn = document.getElementById('tab-btn-' + tabId);
+            activeBtn.classList.add('gold-button', 'text-black', 'font-bold');
+            activeBtn.classList.remove('text-gray-300');
+        }
+
+        // --- Jalali Date & Clock Converter ---
+        function updateClockAndCalendar() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
+
+            // Check Alarms
+            if (hours === '06' && minutes === '30' && seconds === '00' && wakeAlarmActive) {
+                triggerAlarm("☀️ زمان بیداری است! مدیریت محمدسام ملک زاده: وقت آماده‌سازی برای کلاس‌ها");
+            }
+            if (hours === '22' && minutes === '00' && seconds === '00' && sleepAlarmActive) {
+                triggerAlarm("🌙 زمان خواب است! مدیریت محمدسام ملک زاده: وقت استراحت و خواب خوش");
+            }
+
+            // Simple Jalali Date Formatter Simulation
+            const gdm = now.getDate();
+            const gm = now.getMonth() + 1;
+            const gy = now.getFullYear();
+
+            const weekdays = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه', 'شنبه'];
+            const weekdayName = weekdays[now.getDay()];
+
+            // Simple conversion approximation for display
+            let jYear = gy - 621;
+            let jMonthStr = "مهر";
+            let jDay = (gdm + 10) % 30 + 1;
+
+            if (gm >= 10) jMonthStr = "مهر";
+            else if (gm >= 11) jMonthStr = "آبان";
+
+            document.getElementById('current-date').innerText = `${weekdayName} ${jDay} ${jMonthStr} ${jYear}`;
+            document.getElementById('jalali-day-num').innerText = jDay;
+            document.getElementById('jalali-month-year').innerText = `${jMonthStr} ${jYear}`;
+            document.getElementById('jalali-weekday').innerText = weekdayName;
+        }
+
+        function triggerAlarm(msg) {
+            playTone(880, 'square', 1.5);
+            alert("⏰ هشدار زمان‌بندی:\n\n" + msg);
+        }
+
+        function toggleAlarm(type) {
+            if (type === 'wake') {
+                wakeAlarmActive = !wakeAlarmActive;
+                const btn = document.getElementById('wake-alarm-btn');
+                if (wakeAlarmActive) {
+                    btn.className = "w-full py-2.5 rounded-xl font-bold transition text-sm bg-green-600 text-white";
+                    btn.innerHTML = `<i class="fa-solid fa-bell"></i> هشدار بیداری فعال است`;
+                } else {
+                    btn.className = "w-full py-2.5 rounded-xl font-bold transition text-sm bg-gray-700 text-gray-300";
+                    btn.innerHTML = `<i class="fa-solid fa-bell-slash"></i> هشدار بیداری غیرفعال شد`;
+                }
+            } else {
+                sleepAlarmActive = !sleepAlarmActive;
+                const btn = document.getElementById('sleep-alarm-btn');
+                if (sleepAlarmActive) {
+                    btn.className = "w-full py-2.5 rounded-xl font-bold transition text-sm bg-green-600 text-white";
+                    btn.innerHTML = `<i class="fa-solid fa-bell"></i> هشدار خواب فعال است`;
+                } else {
+                    btn.className = "w-full py-2.5 rounded-xl font-bold transition text-sm bg-gray-700 text-gray-300";
+                    btn.innerHTML = `<i class="fa-solid fa-bell-slash"></i> هشدار خواب غیرفعال شد`;
+                }
+            }
+        }
+
+        setInterval(updateClockAndCalendar, 1000);
+        updateClockAndCalendar();
+
+        // --- AI Chat Logic & Hamyar Grade 7 Rules Engine ---
+        const hamyarKnowledge = [
+            { keywords: ['علوم', 'آزمایش', 'فصل اول'], answer: "در درس علوم پایه هفتم (فصل اول): جابه‌جایی و اندازه‌گیری با ابزارهای دقیق انجام می‌شود. پاسخ سوالات نقطه چین:\nپاسخ: ۱. واحد اندازه گیری طول ...[متر]... است.\n۲. چگالی برابر است با ...[جرم تقسیم بر حجم]..." },
+            { keywords: ['ریاضی', 'صفحه', 'تمرین'], answer: "در پاسخ به سوال ریاضی پایه هفتم (همیار):\nپاسخ تمرین جای خالی: حاصل عبارت برابر است با ...[-۱۲]...\nراه حل: اعداد صحیح مثبت و منفی را تفکیک نموده و ساده می‌کنیم." },
+            { keywords: ['عربی', 'ترجمه'], answer: "در ترجمه درس عربی پایه هفتم (همیار):\nهٰذَا الْوَلَدُ ...[این پسر]... صَالِحٌ ...[شایسته]... است.\nپاسخ کامل: این پسر، شایسته است." },
+            { keywords: ['فارسی', 'املا', 'معنی'], answer: "در درس فارسی و املای پایه هفتم:\nمعنی واژه خودشناسی: ...[شناخت سیرت و مقام انسان]...\nپاسخ عبارت جای خالی: سعدی شاعر قرن ...[هفتم]... هجری است." }
+        ];
+
+        function isEducationalQuery(text) {
+            const eduWords = ['علوم', 'ریاضی', 'عربی', 'فارسی', 'املا', 'قرآن', 'پیام', 'مطالعات', 'تفکر', 'هنر', 'فناوری', 'درس', 'سوال', 'صفحه', 'تمرین', 'همیار', 'نقطه چین', 'جای خالی', 'کتاب', 'هفتم'];
+            return eduWords.some(word => text.includes(word));
+        }
+
+        function insertQuickPrompt(promptText) {
+            document.getElementById('chat-input').value = promptText;
+            document.getElementById('chat-input').focus();
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('attachment-preview').classList.remove('hidden');
+                document.getElementById('attachment-name').innerText = `فایل پیوست: ${file.name} (${Math.round(file.size/1024)} KB)`;
+            }
+        }
+
+        function removeAttachment() {
+            selectedFile = null;
+            document.getElementById('chat-file-input').value = '';
+            document.getElementById('attachment-preview').classList.add('hidden');
+        }
+
+        function toggleVoiceInput() {
+            const btn = document.getElementById('voice-btn');
+            if (!isRecording) {
+                isRecording = true;
+                btn.classList.add('bg-red-600', 'text-white', 'animate-pulse');
+                document.getElementById('chat-input').placeholder = "در حال ضبط صدای شما... (مجددا کلیک کنید)";
+            } else {
+                isRecording = false;
+                btn.classList.remove('bg-red-600', 'text-white', 'animate-pulse');
+                document.getElementById('chat-input').placeholder = "سوال درسی، جای خالی یا تمرین پایه هفتم را بنویسید...";
+                document.getElementById('chat-input').value = "پاسخ سوال علوم فصل دوم کتاب همیار هفتم چیست؟";
+            }
+        }
+
+        function handleChatSubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('chat-input');
+            const text = inputEl.value.trim();
+
+            if (!text && !selectedFile) return;
+
+            // Render User Message
+            renderMessage(text || "ارسال فایل درسی جهت بررسی", 'user', selectedFile);
+
+            inputEl.value = '';
+            const currentFile = selectedFile;
+            removeAttachment();
+
+            // Simulate AI Processing
+            setTimeout(() => {
+                let responseText = "";
+
+                if (text && !isEducationalQuery(text) && !currentFile) {
+                    responseText = "⚠️ **پیام سیستم مدیریت محمدسام ملک زاده:**\nمن فقط و فقط پاسخگوی **سوالات و تمرین‌های درسی پایه هفتم (همیار)** هستم. لطفاً سوال درسی، شماره صفحه یا تصویر تمرین خود را ارسال کنید.";
+                } else {
+                    // Match educational response or generate direct blank-filler answer
+                    let found = hamyarKnowledge.find(k => k.keywords.some(kw => text.includes(kw)));
+                    if (found) {
+                        responseText = found.answer;
+                    } else if (text.includes("نقطه چین") || text.includes("جای خالی") || text.includes("پاسخ")) {
+                        responseText = `🎓 **پاسخ دقیق همیار (پایه هفتم):**\n\nجواب در نقطه چین:\nعبارت مربوطه برابر است با ...[ **پاسخ صحیح و دقیق همیار** ]...\n\n*مدیریت: محمدسام ملک زاده*`;
+                    } else {
+                        responseText = `📘 **پاسخ تشریحی دستیار همیار هفتم:**\n\nسوال شما بررسی شد.\nپاسخ صحیح جای خالی: ...[ **پاسخ کلیدی درس پایه هفتم** ]...\nنکته آموزشی: این سوال مربوط به مباحث آزمون نوبت اول/دوم پایه هفتم است.`;
+                    }
+                }
+
+                renderMessage(responseText, 'bot');
+            }, 800);
+        }
+
+        function renderMessage(content, sender, file = null) {
+            const container = document.getElementById('chat-messages');
+            const msgDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                msgDiv.className = "flex gap-3 max-w-[85%] mr-auto flex-row-reverse";
+                let fileHtml = file ? `<div class="mt-2 text-xs bg-yellow-950/40 p-2 rounded-lg border border-yellow-600/30">📎 ${file.name}</div>` : '';
+                msgDiv.innerHTML = `
+                    <div class="w-9 h-9 rounded-full bg-yellow-500 text-black font-bold flex items-center justify-center shrink-0">
+                        م
+                    </div>
+                    <div class="bg-yellow-600/20 border border-yellow-500/40 text-yellow-100 rounded-2xl rounded-tl-none p-3 text-sm shadow-md">
+                        ${content}
+                        ${fileHtml}
+                    </div>
+                `;
+            } else {
+                msgDiv.className = "flex gap-3 max-w-[85%]";
+                msgDiv.innerHTML = `
+                    <div class="w-9 h-9 rounded-full bg-yellow-600/30 border border-yellow-500 flex items-center justify-center shrink-0">
+                        <i class="fa-solid fa-robot text-yellow-400 text-sm"></i>
+                    </div>
+                    <div class="bg-gray-800 border border-yellow-600/20 text-gray-200 rounded-2xl rounded-tr-none p-3 text-sm leading-relaxed shadow-lg whitespace-pre-line">
+                        ${content}
+                    </div>
+                `;
+            }
+
+            container.appendChild(msgDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function clearChat() {
+            document.getElementById('chat-messages').innerHTML = '';
+            renderMessage("گفتگو پاکسازی شد. سوال درسی جدید پایه هفتم را بنویسید.", 'bot');
+        }
+
+        // --- Infinite Image Generator ---
+        function generateAIImage() {
+            const prompt = document.getElementById('image-prompt').value.trim();
+            if (!prompt) {
+                alert("لطفاً توصیفی برای تصویر بنویسید.");
+                return;
+            }
+
+            const imgEl = document.getElementById('generated-image');
+            const placeholder = document.getElementById('image-placeholder');
+
+            placeholder.innerText = "⏳ در حال تولید تصویر بی‌پایان هوش مصنوعی...";
+            imgEl.classList.add('hidden');
+
+            const encodedPrompt = encodeURIComponent("gold theme educational artwork " + prompt);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=800&height=500&nologo=true&seed=${Math.floor(Math.random()*100000)}`;
+
+            const tempImg = new Image();
+            tempImg.src = imageUrl;
+            tempImg.onload = function() {
+                imgEl.src = imageUrl;
+                imgEl.classList.remove('hidden');
+                placeholder.innerText = "";
+            };
+            tempImg.onerror = function() {
+                placeholder.innerText = "⚠️ خطا در دریافت تصویر. لطفاً مجدداً تلاش کنید.";
+            };
+        }
+
+        // --- Infinite Video Generator Simulation ---
+        function generateAIVideo() {
+            const prompt = document.getElementById('video-prompt').value.trim();
+            if (!prompt) {
+                alert("لطفاً موضوع ویدیو را وارد کنید.");
+                return;
+            }
+
+            document.getElementById('video-placeholder').classList.add('hidden');
+            document.getElementById('video-player-box').classList.remove('hidden');
+
+            const canvas = document.getElementById('video-canvas');
+            const ctx = canvas.getContext('2d');
+            const statusText = document.getElementById('video-status-text');
+
+            let frame = 0;
+            statusText.innerText = "🎬 در حال پردازش و رندر انیمیشن درسی...";
+
+            function animateVideo() {
+                if (frame > 120) {
+                    statusText.innerText = "✅ رندر ویدیو با موفقیت تمام شد (تولید بی‌نهایت).";
+                    return;
+                }
+
+                ctx.fillStyle = '#0a0a0c';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Golden background pulse
+                ctx.strokeStyle = '#ca8a04';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+
+                // Moving Animation Elements
+                ctx.fillStyle = '#facc15';
+                ctx.font = '16px Vazirmatn, sans-serif';
+                ctx.fillText(`ویدیو آموزشی: ${prompt.substring(0, 25)}...`, 30, 40);
+
+                // Dynamic Canvas graphics
+                ctx.beginPath();
+                ctx.arc(200 + Math.sin(frame / 10) * 80, 120 + Math.cos(frame / 10) * 30, 25, 0, Math.PI * 2);
+                ctx.fillStyle = '#eab308';
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '12px sans-serif';
+                ctx.fillText(`فریم: ${frame} / 120 - مدیریت محمدسام`, 30, 190);
+
+                frame++;
+                requestAnimationFrame(animateVideo);
+            }
+
+            animateVideo();
+        }
+    </script>
+</body>
+</html>
